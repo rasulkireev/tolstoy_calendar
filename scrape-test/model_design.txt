@@ -1,0 +1,9 @@
+I suspect that the will only be a need for one model - Calendar Entry.
+
+## Arguments
+- Should I have a datetime field for the date or Month and Day fields, which are integers?\n
+  My worry is that converting "АВГУСТ" and "1" to datetime may be problematic.
+
+**models.py**
+date
+body
