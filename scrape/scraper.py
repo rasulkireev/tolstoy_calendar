@@ -6,6 +6,8 @@ url = "http://tolstoy.ru/online/online-publicism/mysli-mudryh-ludey-na-kazhdiy-d
 r = httpx.get(url)
 soup = BeautifulSoup(r, 'html.parser')
 
+
+
 month_ids = []
 for i in range(4,16):
     string = "top_" + str(i)
@@ -25,9 +27,10 @@ for month_id in month_ids:
         except:
             day = i.span.string.strip()
 
-        day_dict['month'] = month_name.title() 
-        day_dict['day'] = day
         
+        day_dict['month'] = month_name.title() 
+        day_dict['day'] = int(day)
+
         text = []
         s = i
         while True:
