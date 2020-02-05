@@ -1,12 +1,17 @@
 import httpx
 from bs4 import BeautifulSoup
 import json
+import pandas as pd
+import dateparser as dp
+import datetime as dt
+import os
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 url = "http://tolstoy.ru/online/online-publicism/mysli-mudryh-ludey-na-kazhdiy-den/"
 r = httpx.get(url)
 soup = BeautifulSoup(r, 'html.parser')
-
-
 
 month_ids = []
 for i in range(4,16):
@@ -29,7 +34,7 @@ for month_id in month_ids:
 
         
         day_dict['month'] = month_name.title() 
-        day_dict['day'] = int(day)
+        day_dict['day'] = day
 
         text = []
         s = i
@@ -53,5 +58,14 @@ for month_id in month_ids:
         data.append(day_dict.copy())
         
     
-with open('tolstoy-calendar.json','w',encoding='ascii') as f:
+with open('data/tolstoy-calendar.json','w',encoding='ascii') as f:
     json.dump(data,f)
+
+df = pd.DataFrame(data)
+df['quote_date'] = (df["month"] + " " + df["day"]).apply(dp.parse)
+df['author'] = df['author'].str.rstrip('.')
+df['month'] = df['quote_date'].dt.month
+df['day'] = df['quote_date'].dt.day
+df = df[['month','day','text','author']]
+df.to_csv('data/tolstoy-calendar.csv')
+
