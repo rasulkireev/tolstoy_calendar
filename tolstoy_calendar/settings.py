@@ -57,7 +57,7 @@ ROOT_URLCONF = 'tolstoy_calendar.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,8 +125,8 @@ STATIC_URL = '/static/'
 
 
 # Postmark Email
-EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
-POSTMARK_API_KEY     = '2aed92db-bbc1-4045-a3a8-e4b998a14f06'
-POSTMARK_SENDER      = 'tolstoy@rasulkireev.com'
-POSTMARK_TEST_MODE   = True
-POSTMARK_TRACK_OPENS = False
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+FROM_EMAIL = 'me@rasulkireev.com' # replace with your address
+SENDGRID_API_KEY='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'
+
+SENDGRID_SANDBOX_MODE_IN_DEBUG = True
