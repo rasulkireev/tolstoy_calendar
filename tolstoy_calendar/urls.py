@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include, url
+from newsletter.views import new_subscriber, confirm, delete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('new/', new_subscriber, name='new_subscriber'),
+    path('confirm/', confirm, name='confirm'),
+    path('delete/', delete, name='delete'),
+
+    path('', include('pages.urls')),
 ]

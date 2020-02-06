@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'newsletter.apps.NewsletterConfig',
+    'pages.apps.PagesConfig',
 ]
 
 MIDDLEWARE = [
@@ -118,3 +121,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
+# Postmark Email
+EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
+POSTMARK_API_KEY     = '2aed92db-bbc1-4045-a3a8-e4b998a14f06'
+POSTMARK_SENDER      = 'tolstoy@rasulkireev.com'
+POSTMARK_TEST_MODE   = True
+POSTMARK_TRACK_OPENS = False
