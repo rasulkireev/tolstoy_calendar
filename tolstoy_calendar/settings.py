@@ -20,11 +20,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gqmvx7#wd^okhp_$q4#m0(6ts4tho!k!x_n_h7v)th8l8l$i41'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import environ
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
+# False if not in os.environ
+DEBUG = env('DEBUG')
+SECRET_KEY = env('SECRET_KEY')
 ALLOWED_HOSTS = []
 
 
@@ -127,6 +135,6 @@ STATIC_URL = '/static/'
 # Postmark Email
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 FROM_EMAIL = 'me@rasulkireev.com' # replace with your address
-SENDGRID_API_KEY='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'
+SENDGRID_API_KEY=env('SENDGRID_API_KEY')
 
 SENDGRID_SANDBOX_MODE_IN_DEBUG = True
