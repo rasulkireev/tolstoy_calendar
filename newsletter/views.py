@@ -12,6 +12,7 @@ import datetime as dt
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from django.core.mail import send_mail
 
 def random_digits():
     return "%0.12d" % random.randint(0, 999999999999)
@@ -21,18 +22,30 @@ def new_subscriber(request):
     if request.method == 'POST':
         sub = Subscriber(email=request.POST['email'], conf_num=random_digits())
         sub.save()
+
         message = Mail(
-            from_email=settings.FROM_EMAIL,
-            to_emails=sub.email,
-            subject='Подтверждение Подписки',
-            html_content='Спасибо за подписку! \
-                Остался последний шаг. Перейдите по следующей ссылке чтобы завершить процесс. \
-                <a href="{}/confirm/?email={}&conf_num={}"></a>.' \
-                .format(request.build_absolute_uri('/confirm/'),
-                                                    sub.email,
-                                                    sub.conf_num))
-        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
-        response = sg.send(message)
+            from_email = settings.FROM_EMAIL,
+            to_emails = sub.email,
+            subject = 'Подтверждение Подписки',
+            html_content = "<html><body>\
+                <p>Спасибо за подписку!</p>\
+                <p>Остался последний шаг. Перейдите по следующей ссылке чтобы завершить процесс.</p>\
+                <a href='{}/confirm/?email={}&conf_num={}'>\
+                Click here to confirm you registration</a>\
+                            </body><html>".format(request.build_absolute_uri('/confirm/'),
+                            sub.email,
+                            sub.conf_num))
+            
+            
+        try:
+            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except:
+            print(e.message)
+
         return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'added', 'form': SubscriberForm()})
     else:
         return render(request, 'newsletter/template_index.html', {'form': SubscriberForm()})

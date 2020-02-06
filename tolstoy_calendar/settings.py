@@ -132,9 +132,8 @@ STATIC_URL = '/static/'
 
 
 
-# Postmark Email
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+# SendGrid Email
+# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 FROM_EMAIL = 'me@rasulkireev.com' # replace with your address
 SENDGRID_API_KEY=env('SENDGRID_API_KEY')
-
-SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
