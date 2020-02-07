@@ -27,14 +27,7 @@ def new_subscriber(request):
             from_email = settings.FROM_EMAIL,
             to_emails = sub.email,
             subject = 'Подтверждение Подписки',
-            html_content = "<html><body>\
-                <p>Спасибо за подписку!</p>\
-                <p>Остался последний шаг. Перейдите по следующей ссылке чтобы завершить процесс.</p>\
-                <a href='{}/confirm/?email={}&conf_num={}'>\
-                Click here to confirm you registration</a>\
-                            </body><html>".format(request.build_absolute_uri('/confirm/'),
-                            sub.email,
-                            sub.conf_num))
+            html_content = 'newsletter/emails/confirm_subscription.html')
             
             
         try:
