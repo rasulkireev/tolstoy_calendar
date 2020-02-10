@@ -1,16 +1,6 @@
-<html>
-    <head></head>
-    <body>
         <p>Спасибо за подписку!</p>
         <p>Остался последний шаг. Перейдите по следующей ссылке чтобы завершить процесс.</p>
-        <a href="{{ request.build_absolute_uri('/confirm/') }}/confirm/?email={{ sub.email }}&conf_num={{ sub.conf_num }}">
+        <a href="{{ absolute_uri }}/confirm/?email={{ sub_email }}&conf_num={{ sub_conf }}">
             Click here to confirm you registration
         </a>
-        <p>
-            format(request.build_absolute_uri('/confirm/'),
-            sub.email,
-            sub.conf_num)
-        </p>
-    </body>
-<html>
-                    
+          

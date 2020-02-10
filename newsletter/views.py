@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 
 from newsletter.models import Subscriber
 from newsletter.forms import SubscriberForm
@@ -23,11 +24,21 @@ def new_subscriber(request):
         sub = Subscriber(email=request.POST['email'], conf_num=random_digits())
         sub.save()
 
+        message_context = {
+            'absolute_uri':request.build_absolute_uri('/confirm/'),
+            'sub_email':sub.email,
+            'sub_conf':sub.conf_num
+        }
+
+        html_confirmation = render_to_string('newsletter/emails/confirm_subscription.html', message_context)
+        print(html_confirmation)
+
+        
         message = Mail(
             from_email = settings.FROM_EMAIL,
             to_emails = sub.email,
             subject = 'Подтверждение Подписки',
-            html_content = 'newsletter/emails/confirm_subscription.html')
+            html_content = html_confirmation)
             
             
         try:
