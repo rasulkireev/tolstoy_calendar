@@ -6,18 +6,17 @@ from django.template.loader import render_to_string
 
 from newsletter.models import Subscriber
 from newsletter.forms import SubscriberForm
-from support.data.months import months_dict
 
-import random
+#cutom functions
+from support.data.months import months_dict
+from .utilities import random_digits
+
 import pandas as pd
 import datetime as dt
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from django.core.mail import send_mail
-
-def random_digits():
-    return "%0.12d" % random.randint(0, 999999999999)
 
 def date_stringer_ru():
     today = dt.datetime.today()
@@ -56,8 +55,8 @@ def new_subscriber(request):
             print(response.status_code)
             print(response.body)
             print(response.headers)
-        except:
-            print(e.message)
+        except Exception as e:
+            print(e)
 
         return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'added', 'form': SubscriberForm()})
     else:
