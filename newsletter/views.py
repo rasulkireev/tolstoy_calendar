@@ -58,7 +58,7 @@ def new_subscriber(request):
         except Exception as e:
             print(e)
 
-        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'added', 'form': SubscriberForm()})
+        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'добавлен', 'form': SubscriberForm()})
     else:
         return render(request, 'newsletter/template_index.html', {'form': SubscriberForm()})
 
@@ -68,18 +68,18 @@ def confirm(request):
     if sub.conf_num == request.GET['conf_num']:
         sub.confirmed = True
         sub.save()
-        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'confirmed'})
+        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'подтвержден'})
     else:
-        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'denied'})
+        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'откланен'})
 
 
 def delete(request):
     sub = Subscriber.objects.get(email=request.GET['email'])
     if sub.conf_num == request.GET['conf_num']:
         sub.delete()
-        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'unsubscribed'})
+        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'отписан'})
     else:
-        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'denied'})
+        return render(request, 'newsletter/template_index.html', {'email': sub.email, 'action': 'откланен'})
 
 
 def get_todays_quote_as_a_list():
@@ -100,10 +100,10 @@ def send_newsletter(self, request):
     subscribers = Subscriber.objects.filter(confirmed=True)
 
     message_context = {
-            'absolute_uri':request.build_absolute_uri('/confirm/'),
-            'sub_email':sub.email,
-            'sub_conf':sub.conf_num,
-            'paragraphs':paragraphs
+        'delete_uri': request.build_absolute_uri('/delete/'),
+        'email': sub.email,
+        'conf_number': sub.conf_num,
+        'paragraphs': paragraphs
         }
 
     html_content = render_to_string('newsletter/emails/daily_html.html', message_context)
@@ -113,10 +113,7 @@ def send_newsletter(self, request):
                 from_email=settings.FROM_EMAIL,
                 to_emails=sub.email,
                 subject=date_stringer_ru,
-                html_content=contents + (
-                    '<br><a href="{}/delete/?email={}&conf_num={}">Unsubscribe</a>.').format(
-                        request.build_absolute_uri('/delete/'),
-                        sub.email,
-                        sub.conf_num))
+                html_content=contents)
+
         sg.send(message)
     

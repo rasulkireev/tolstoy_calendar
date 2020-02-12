@@ -1,31 +1,30 @@
 <!doctype html>
 <html>
     <head>
-        <title> Email Newsletter </title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <title>Мудрость Толстого</title>
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     </head>
     <body>
-        <div class="container">
-            <div class="col-12">
-                <h1>Email Newsletter</h1>
-            </div>
-            
-            <div class="col-12">
-                {% if email %}
-                <p>{{ email }} has been {{ action }}.</p>
-                {% endif %}
-            </div>
+        <div class="">
+                <div class="mb-4">
+                    <h1 class="text-3xl font-semibold text-center">Мудрость Толстого</h1>
+
+                    {% if email %}
+                    <p class="text-center text-lg">{{ email }} был {{ action }}.</p>
+                    {% endif %}
+                </div>
+
 
         {% if form %}
-            <div class="col-12 col-md-4">
+            <div class="w-1/3 mx-auto">
                 <form method="post" novalidate>
                     {% csrf_token %}
-                    {{ form }}
-                    <br>
-                    <button type="submit" class="btn btn-success">Subscribe!</button>
+                    <input type="email" name="email" placeholder="Ваш email" class="w-full p-1 mb-2 leading-tight text-gray-800 bg-gray-100 border rounded appearance-none focus:outline-none focus:bg-white form-control" maxlength="100" required="" id="id_email">
+                    <button type="submit" class="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg">Подпишись</button>
                 </form>
             </div>
         {% endif %}
-        </div>
+
+    </div>
     </body>
 </html>
