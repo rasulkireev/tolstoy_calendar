@@ -142,7 +142,7 @@ SENDGRID_API_KEY=env('SENDGRID_API_KEY')
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
-if Debug:
+if DEBUG:
         sentry_sdk.init(
         dsn=env('dsn'),
         integrations=[DjangoIntegration()],
