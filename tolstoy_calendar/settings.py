@@ -137,3 +137,17 @@ STATIC_URL = '/static/'
 FROM_EMAIL = 'me@rasulkireev.com' # replace with your address
 SENDGRID_API_KEY=env('SENDGRID_API_KEY')
 # SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+if Debug:
+        sentry_sdk.init(
+        dsn=env('dsn'),
+        integrations=[DjangoIntegration()],
+
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True
+    )
