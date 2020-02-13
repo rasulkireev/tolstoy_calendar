@@ -151,3 +151,14 @@ if DEBUG:
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True
     )
+
+
+SITE_ID = 1
+
+# Celery application definition
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/New_York'

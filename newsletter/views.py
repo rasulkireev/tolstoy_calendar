@@ -94,26 +94,4 @@ def get_todays_quote_as_a_list():
 
     return message
 
-
-def send_newsletter(self, request):
-    paragraphs = get_todays_quote_as_a_list()
-    subscribers = Subscriber.objects.filter(confirmed=True)
-
-    message_context = {
-        'delete_uri': request.build_absolute_uri('/delete/'),
-        'email': sub.email,
-        'conf_number': sub.conf_num,
-        'paragraphs': paragraphs
-        }
-
-    html_content = render_to_string('newsletter/emails/daily_html.html', message_context)
-
-    for sub in subscribers:
-        message = Mail(
-                from_email=settings.FROM_EMAIL,
-                to_emails=sub.email,
-                subject=date_stringer_ru,
-                html_content=contents)
-
-        sg.send(message)
     
