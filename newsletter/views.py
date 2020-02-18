@@ -95,3 +95,35 @@ def get_todays_quote_as_a_list():
     return message
 
     
+
+def send_newsletter(request):
+    paragraphs = get_todays_quote_as_a_list()
+    subscribers = Subscriber.objects.filter(confirmed=True)
+
+    message_context = {
+        # 'delete_uri': request.build_absolute_uri('/delete/'),
+        # 'email': sub.email,
+        # 'conf_number': sub.conf_num,
+        'paragraphs': paragraphs
+        }
+
+    html_content = render_to_string('newsletter/emails/daily_email.html', message_context)
+
+    if request.method == 'GET':
+        for sub in subscribers:
+            message = Mail(
+                    from_email=settings.FROM_EMAIL,
+                    to_emails=sub.email,
+                    subject=date_stringer_ru,
+                    html_content=html_content)
+
+            try:
+                sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+                response = sg.send(message)
+                print(response.status_code)
+                print(response.body)
+                print(response.headers)
+            except Exception as e:
+                print(e)
+
+    return render(request, 'newsletter/template_index_email.html', {'s_message': "Sent"})

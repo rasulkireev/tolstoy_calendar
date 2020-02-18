@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Мудрость Толстого</title>
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <p class="text-center text-lg">{{ s_message }}</p>
+
+        <form class="my-10" method="get" novalidate>
+            {% csrf_token %}
+            <button type="submit" class="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded">Send Newsletter</button>
+        </form>
+    </body>
+</html>
