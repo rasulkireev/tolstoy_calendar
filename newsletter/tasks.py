@@ -7,7 +7,6 @@ from newsletter.models import Subscriber
 from django.template.loader import render_to_string
 
 
-@periodic_task(run_every=crontab(hour="8", minute="0"))
 def send_newsletter(self, request):
     paragraphs = get_todays_quote_as_a_list()
     subscribers = Subscriber.objects.filter(confirmed=True)
