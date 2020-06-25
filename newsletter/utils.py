@@ -1,3 +1,8 @@
+import random
+
+def random_digits():
+    return "%0.12d" % random.randint(0, 999999999999)
+
 months_dict = {
     1:'Январь',
     2:'Февраль',

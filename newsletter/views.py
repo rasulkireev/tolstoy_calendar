@@ -8,8 +8,7 @@ from newsletter.models import Subscriber
 from newsletter.forms import SubscriberForm
 
 #cutom functions
-from support.data.months import months_dict
-from .utilities import random_digits
+from newsletter.utils import random_digits, months_dict
 
 import pandas as pd
 import datetime as dt
@@ -18,10 +17,10 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from django.core.mail import send_mail
 
-def date_stringer_ru():
+def date_stringer_ru(month_dict):
     today = dt.datetime.today()
     month = today.month
-    month_name = month_dict['month']
+    month_name = month_dict[month]
     day = today.day
     
     string_date = str(month_name) + ' ' + str(day)
@@ -91,39 +90,34 @@ def get_todays_quote_as_a_list():
 
     row = df[ (df['month']==month) & (df['day'] == day) ]
     message = row['text'].to_list()
+    message = message[0]
+    message = eval(message)
 
     return message
 
     
-
-def send_newsletter(request):
+def send_newsletter():
     paragraphs = get_todays_quote_as_a_list()
     subscribers = Subscriber.objects.filter(confirmed=True)
 
     message_context = {
-        # 'delete_uri': request.build_absolute_uri('/delete/'),
-        # 'email': sub.email,
-        # 'conf_number': sub.conf_num,
         'paragraphs': paragraphs
         }
 
     html_content = render_to_string('newsletter/emails/daily_email.html', message_context)
 
-    if request.method == 'GET':
-        for sub in subscribers:
-            message = Mail(
-                    from_email=settings.FROM_EMAIL,
-                    to_emails=sub.email,
-                    subject=date_stringer_ru,
-                    html_content=html_content)
+    for sub in subscribers:
+        message = Mail(
+                from_email=settings.FROM_EMAIL,
+                to_emails=sub.email,
+                subject=date_stringer_ru(months_dict),
+                html_content=html_content)
 
-            try:
-                sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
-                response = sg.send(message)
-                print(response.status_code)
-                print(response.body)
-                print(response.headers)
-            except Exception as e:
-                print(e)
-
-    return render(request, 'newsletter/template_index_email.html', {'s_message': "Sent"})
+        try:
+            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e)
