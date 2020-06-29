@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'django_celery_results',
@@ -70,10 +71,7 @@ WSGI_APPLICATION = 'tolstoy_calendar.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': env.db()
 }
 
 
@@ -150,7 +148,7 @@ if DEBUG:
 SITE_ID = 1
 
 # Celery application definition
-CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_BROKER_URL = env('REDIS_URL')
 CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
 CELERY_CACHE_BACKEND = env('CELERY_CACHE_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -165,4 +163,5 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Heroku Settings
-django_heroku.settings(locals())
+if not DEBUG:
+    django_heroku.settings(locals())
