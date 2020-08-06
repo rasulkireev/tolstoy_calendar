@@ -149,18 +149,12 @@ SITE_ID = 1
 
 # Celery application definition
 CELERY_BROKER_URL = env('REDIS_URL')
-CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
-CELERY_CACHE_BACKEND = env('CELERY_CACHE_BACKEND')
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/New_York'
-CELERY_BEAT_SCHEDULE = {
-    'send_newsletter': {
-        'task': 'newsletter.tasks.run',
-        'schedule': crontab(minute=1),
-    },
-}
 
 # Heroku Settings
 if not DEBUG:
