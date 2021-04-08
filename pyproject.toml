@@ -6,7 +6,7 @@ authors = ["Rasul Kireev <me@rasulkireev.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-django = "^3.0.6"
+django = "^3.0.14"
 django-environ = "^0.4.5"
 django-sendgrid-v5 = "^0.8.1"
 tweepy = "^3.8.0"
